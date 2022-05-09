@@ -130,6 +130,10 @@ class VideoCamera(object):
     def get_frame(self):
         global df1
         ret, image = self.video.read()
+        if not ret:
+            self.video = cv2.VideoCapture(
+                "https://cdn.create.vista.com/api/media/medium/183179400/stock-video-yes-positive-casually-sitting-woman")
+
         image = cv2.resize(image, (600, 500))
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         face_rects = face_cascade.detectMultiScale(gray, 1.3, 5)
