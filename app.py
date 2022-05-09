@@ -15,7 +15,8 @@ def index():
 def gen(camera):
     while True:
         global df1
-        frame, df1 = camera.get_frame()
+        camera.get_frame()
+        frame, df1 = camera.jpeg, camera.df1
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
@@ -27,6 +28,7 @@ def video_feed():
 @app.route('/t')
 def gen_table():
     return df1.to_json(orient='records')
+
 
 if __name__ == '__main__':
     app.debug = True

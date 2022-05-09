@@ -15,7 +15,8 @@ from threading import Thread
 # from Spotipy import *  
 import time
 import pandas as pd
-
+# https://www.youtube.com/watch?v=A5iUcZ9TAN8
+# https://www.kirupa.com/html5/accessing_your_webcam_in_html5.htm
 face_cascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
 ds_factor = 0.6
 
@@ -116,21 +117,25 @@ class WebcamVideoStream:
 
 ''' Class for reading video stream, generating prediction and recommendations '''
 
-
+# https://cdn.create.vista.com/api/media/medium/183179400/stock-video-yes-positive-casually-sitting-woman
+# https://cdn.create.vista.com/api/media/medium/289642854/stock-video-yes-young-african-man-shaking
+# https://cdn.create.vista.com/api/media/medium/443409316/stock-video-portrait-of-middle-aged-businessman
+# https://cdn.create.vista.com/api/media/medium/428476838/stock-video-portrait-of-latin-woman-angry
 class VideoCamera(object):
+    def __init__(self):
+        self.video = cv2.VideoCapture("https://cdn.create.vista.com/api/media/medium/183179400/stock-video-yes-positive-casually-sitting-woman")
+        self.df1 = pd.read_csv(music_dist[show_text[0]])
+
 
     def get_frame(self):
-        global cap1
         global df1
-        cap1 = WebcamVideoStream(src=0).start()
-        image = cap1.read()
-        # image = ('1.jpg')
+        ret, image = self.video.read()
         image = cv2.resize(image, (600, 500))
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         face_rects = face_cascade.detectMultiScale(gray, 1.3, 5)
-        df1 = pd.read_csv(music_dist[show_text[0]])
-        df1 = df1[['Name', 'Album', 'Artist']]
-        df1 = df1.head(15)
+
+        self.df1 = self.df1[['Name', 'Album', 'Artist']]
+        self.df1 = self.df1.head(15)
         for (x, y, w, h) in face_rects:
             cv2.rectangle(image, (x, y - 50), (x + w, y + h + 10), (0, 255, 0), 2)
             roi_gray_frame = gray[y:y + h, x:x + w]
@@ -139,11 +144,10 @@ class VideoCamera(object):
 
             maxindex = int(np.argmax(prediction))
             show_text[0] = maxindex
-            # print("===========================================",music_dist[show_text[0]],"===========================================")
-            # print(df1)
+
             cv2.putText(image, emotion_dict[maxindex], (x + 20, y - 60), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255),
                         2, cv2.LINE_AA)
-            df1 = music_rec()
+            self.df1 = music_rec()
 
         global last_frame1
         last_frame1 = image.copy()
@@ -151,7 +155,8 @@ class VideoCamera(object):
         img = Image.fromarray(last_frame1)
         img = np.array(img)
         ret, jpeg = cv2.imencode('.jpg', img)
-        return jpeg.tobytes(), df1
+        self.jpeg = jpeg.tobytes()
+        # cv2.waitKey(10)
 
 
 def music_rec():
