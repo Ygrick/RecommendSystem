@@ -13,12 +13,11 @@ df1 = df1.head(15)
 def login_page():
     login = request.form.get('login')
     password = request.form.get('password')
-
-    if login == 'ygrick' and password == 'admin':
-        # next_page = request.args.get('next')
-        return redirect(url_for('index'))
-    else:
-        flash('Login or password is not correct')
+    if login and password:
+        if login == 'ygrick' and password == 'admin':
+            return redirect(url_for('index'))
+        else:
+            flash('Login or password is not correct')
 
     return render_template('login.html')
 
