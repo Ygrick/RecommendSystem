@@ -123,7 +123,7 @@ class WebcamVideoStream:
 # https://cdn.create.vista.com/api/media/medium/428476838/stock-video-portrait-of-latin-woman-angry
 class VideoCamera(object):
     def __init__(self):
-        self.video = cv2.VideoCapture("https://cdn.create.vista.com/api/media/medium/183179400/stock-video-yes-positive-casually-sitting-woman")
+        self.video = cv2.VideoCapture("https://cdn.create.vista.com/api/media/medium/428476838/stock-video-portrait-of-latin-woman-angry")
         self.df1 = pd.read_csv(music_dist[show_text[0]])
 
 
